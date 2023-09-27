@@ -10,7 +10,10 @@ Leveraging a subset of the amazon_polarity dataset, the project employs two powe
 
 **Phase 3: Streamlit App Deployment**
 
-This sentiment analysis project aims to classify product reviews into positive or negative sentiments.
+[GitHub](https://github.com/JacobJ215/Sentiment-Analysis-with-DistilBERT/tree/main)
+
+[Notebooks](https://github.com/JacobJ215/Sentiment-Analysis-with-DistilBERT/tree/main/notebooks)
+
 
 ## Demo App
 
