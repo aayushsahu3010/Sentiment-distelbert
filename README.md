@@ -14,6 +14,8 @@ Leveraging a subset of the amazon_polarity dataset, the project employs two powe
 
 [Notebooks](https://github.com/JacobJ215/Sentiment-Analysis-with-DistilBERT/tree/main/notebooks)
 
+[Demo](https://jacobj215-sentiment-analysis-with-distilbert-app-6dftyk.streamlit.app/)
+
 
 ## Demo App
 
@@ -223,7 +225,7 @@ Negative Reviews
 
 
 ## Phase 3: Streamlit App Deployment
-In the final phase, a streamlined user interface is constructed using Streamlit. This frontend empowers users to input reviews and receive instant sentiment predictions. The app is deployed to Streamlit Cloud, ensuring seamless accessibility for end-users at https://jacobj215-sentiment-analysis-with-distilbert-app-6dftyk.streamlit.app/.
+In the final phase, a streamlined user interface is constructed using Streamlit. This frontend empowers users to input reviews and receive instant sentiment predictions. The app is deployed to Streamlit Cloud, ensuring seamless accessibility for end-users at [Demo](https://jacobj215-sentiment-analysis-with-distilbert-app-6dftyk.streamlit.app/)
 
 This project amalgamates rigorous data analysis, machine learning, and natural language processing techniques to deliver a robust sentiment analysis solution. 
 
