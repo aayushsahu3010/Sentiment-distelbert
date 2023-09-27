@@ -11,7 +11,7 @@ model = TFDistilBertForSequenceClassification.from_pretrained('./models/fine_tun
 
 # Function to perform sentiment analysis
 def perform_sentiment_analysis(text):
-    inputs = tokenizer(text, padding='max_length', truncation=True, max_length=128, return_tensors='tf')
+    inputs = tokenizer(text, padding=True, truncation=True, return_tensors='tf')
     outputs = model(**inputs)
     logits = outputs.logits
     predicted_label = np.argmax(logits).item()
