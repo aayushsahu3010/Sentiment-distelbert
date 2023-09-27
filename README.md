@@ -2,6 +2,7 @@
 
 ## Overview
 This sentiment analysis project focuses on understanding and classifying the sentiment expressed in product reviews. The project encompasses three distinct phases, each contributing to the comprehensive sentiment analysis pipeline.
+Leveraging a subset of the amazon_polarity dataset, the project employs two powerful models: an LSTM model with GloVe embeddings and a fine-tuned DistilBERT. The LSTM model achieved an accuracy of 80.40%, while the DistilBERT model outperformed with an impressive 90.75% accuracy. Additionally, a user-friendly Streamlit app was developed to provide real-time sentiment analysis capabilities, ensuring seamless deployment for end-users.
 
 **Phase 1: Exploratory Data Analysis (EDA) and LSTM Model**
 
@@ -9,10 +10,11 @@ This sentiment analysis project focuses on understanding and classifying the sen
 
 **Phase 3: Streamlit App Deployment**
 
+This sentiment analysis project aims to classify product reviews into positive or negative sentiments.
+
 ## Demo App
 
 ![](./screenshots/streamlit-demo.png)
-
 
 Check out the deployed Streamlit app for live predictions [here](https://jacobj215-sentiment-analysis-with-distilbert-app-6dftyk.streamlit.app/).
 
@@ -47,8 +49,6 @@ Check out the deployed Streamlit app for live predictions [here](https://jacobj2
     ```
     streamlit run app.py
     ```
-
-
 
 
 ## Phase 1: Exploratory Data Analysis (EDA) and LSTM Model
@@ -135,11 +135,12 @@ history = model.fit(
 
 ![](./screenshots/tensorboard/epoch_loss.png)
 
+The model begins to diverege around 9 epochs luckily, using our ModelCheckpoint callback we were able so save the best performing model.
+
 **Confusion Matrix**
 
 ![](./screenshots/lstm/confusion_matrix.png)
 
-The model begins to diverege around 9 epochs luckily, using our callbacks we were able so save the best performing model.
 
 **ROC AUC Curve**
 
@@ -149,11 +150,29 @@ The model begins to diverege around 9 epochs luckily, using our callbacks we wer
 
 **Predicting on orginal test data**
 
+Positive Reiviews
+
+![](./screenshots/lstm/pos_sent_pred.png)
+
+
+Negative Reiviews
+
+![](./screenshots/lstm/neg_sent_pred.png)
+
 **Predicting on sequenced data**
+
+Positive Reiviews
+
+![](./screenshots/lstm/pos_seq_pred.png)
+
+
+Negative Reiviews
+
+![](./screenshots/lstm/neg_seq_pred.png)
 
 **Predicting on sample text**
 
-We make predictions on both the test data and custom reviews.
+![](./screenshots/lstm/predictions.png)
 
 ## Phase 2: Fine-tuning DistilBERT
 The second phase of the project centers around fine-tuning the DistilBERT model. This process is carried out in Google Colab, leveraging the Amazon Polarity dataset. Upon completion, the fine-tuned model is downloaded and evaluated, mirroring the assessment approach used for the LSTM models. Predictions are generated for both the test data and custom reviews.
@@ -164,26 +183,52 @@ DistilBERT is a lightweight version of BERT (Bidirectional Encoder Representatio
 
 **Fine-tuning DistilBERT**
 
-We fine-tune DistilBERT on the amazon_polarity dataset using Google Colab.
+We fine-tune DistilBERT on the amazon_polarity dataset. The model was trained on google colabs T4 GLU over 3 epochs while utilizing a PolynomialDecay learning rate scheduler.
 
 **Loading the Model**
 
-We load the fine-tuned DistilBERT model for sentiment analysis.
+```
+# Initialize BERT tokenizer and model
+model_name = 'distilbert-base-uncased'
+tokenizer = DistilBertTokenizer.from_pretrained(model_name)
+model = TFDistilBertForSequenceClassification.from_pretrained('../models/fine_tuned_distilbert', num_labels=2)
+
+```
+
+
+![](./screenshots/distilBERT/model_summary.png)
 
 **Model Evaluation**
 
-
+![](./screenshots/distilBERT/accruacy.png)
 
 **Predictions**
 
 **Predicting on orginal test data**
 
+Postive Reviews
+
+![](./screenshots/distilBERT/pos_review_bert.png)
+
+Negative Reviews
+
+![](./screenshots/distilBERT/pos_review_bert.png)
+
 **Predicting on sample text**
 
-We make predictions on both the test data and custom reviews.
+![](./screenshots/distilBERT/predictions.png)
 
 
 ## Phase 3: Streamlit App Deployment
 In the final phase, a streamlined user interface is constructed using Streamlit. This frontend empowers users to input reviews and receive instant sentiment predictions. The app is deployed to Streamlit Cloud, ensuring seamless accessibility for end-users at https://jacobj215-sentiment-analysis-with-distilbert-app-6dftyk.streamlit.app/.
 
 This project amalgamates rigorous data analysis, machine learning, and natural language processing techniques to deliver a robust sentiment analysis solution. 
+
+
+## Conclusion
+
+This sentiment analysis project has successfully demonstrated the feasibility and effectiveness of using machine learning models to understand and classify the sentiment expressed in product reviews. The project employed two powerful models, an LSTM model with GloVe embeddings and a fine-tuned DistilBERT model, which achieved impressive accuracies of 80.40% and 90.75%, respectively. 
+
+The project's findings have several potential applications. For example, businesses can use sentiment analysis to track customer satisfaction, identify areas for improvement, and develop more effective marketing campaigns. Additionally, consumers can use sentiment analysis to inform their purchase decisions by understanding the overall sentiment towards specific products or services.
+
+Overall, this project has made a significant contribution to the field of sentiment analysis by demonstrating the effectiveness of machine learning models for understanding and classifying customer sentiment. Additionally, the project has developed a user-friendly tool that makes sentiment analysis accessible to a wider range of users.
