@@ -1,51 +1,46 @@
 # --------------------------------------------------
-# Base image: lightweight Python 3.10
+# Base image
 # --------------------------------------------------
 FROM python:3.10-slim
 
 # --------------------------------------------------
-# Environment configuration
+# Environment setup
 # --------------------------------------------------
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8501 \
     STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
-    STREAMLIT_SERVER_PORT=${PORT} \
     STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
 # --------------------------------------------------
 # System dependencies
 # --------------------------------------------------
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        git \
-        curl && \
+    apt-get install -y --no-install-recommends build-essential git curl && \
     rm -rf /var/lib/apt/lists/*
 
 # --------------------------------------------------
-# Set working directory
+# Working directory
 # --------------------------------------------------
 WORKDIR /app
 
 # --------------------------------------------------
-# Install Python dependencies first for caching
+# Install dependencies
 # --------------------------------------------------
 COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
 # --------------------------------------------------
-# Copy all project files
+# Copy all source code
 # --------------------------------------------------
 COPY . .
 
 # --------------------------------------------------
-# Expose the port Streamlit will run on
+# Expose Cloud Run port
 # --------------------------------------------------
-EXPOSE ${PORT}
+EXPOSE 8080
 
 # --------------------------------------------------
-# Run Streamlit directly (no need for start.sh)
+# Command: bind Streamlit to Cloud Run’s PORT
 # --------------------------------------------------
-CMD ["streamlit", "run", "app.py", "--server.port=${PORT}", "--server.address=0.0.0.0"]
+CMD ["sh", "-c", "streamlit run app.py --server.port=$PORT --server.address=0.0.0.0"]
