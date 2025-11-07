@@ -1,42 +1,51 @@
-# Use a slim Python base
+# --------------------------------------------------
+# Base image: lightweight Python 3.10
+# --------------------------------------------------
 FROM python:3.10-slim
 
-# Prevent Python from writing .pyc files and buffer stdout/stderr
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# --------------------------------------------------
+# Environment configuration
+# --------------------------------------------------
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8501 \
+    STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
+    STREAMLIT_SERVER_PORT=${PORT} \
+    STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
-# Streamlit defaults
-ENV PORT=8501
-ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
-ENV STREAMLIT_SERVER_PORT=${PORT}
-ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
-
-# system deps (git used for huggingface downloads, build-essential for any wheels)
+# --------------------------------------------------
+# System dependencies
+# --------------------------------------------------
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      build-essential \
-      git \
-      curl \
-      && rm -rf /var/lib/apt/lists/*
+        build-essential \
+        git \
+        curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set workdir
+# --------------------------------------------------
+# Set working directory
+# --------------------------------------------------
 WORKDIR /app
 
-# Copy requirements first for better caching
+# --------------------------------------------------
+# Install Python dependencies first for caching
+# --------------------------------------------------
 COPY requirements.txt .
-
-# Upgrade pip and install wheel then the python deps
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
-# Copy the rest of the repo
+# --------------------------------------------------
+# Copy all project files
+# --------------------------------------------------
 COPY . .
 
-# Make start script executable
-RUN chmod +x /app/start.sh
-
-# Expose Streamlit port
+# --------------------------------------------------
+# Expose the port Streamlit will run on
+# --------------------------------------------------
 EXPOSE ${PORT}
 
-# Start: download fallback model if required, then launch streamlit
-CMD ["/app/start.sh"]
+# --------------------------------------------------
+# Run Streamlit directly (no need for start.sh)
+# --------------------------------------------------
+CMD ["streamlit", "run", "app.py", "--server.port=${PORT}", "--server.address=0.0.0.0"]
